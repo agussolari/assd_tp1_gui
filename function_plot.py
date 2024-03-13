@@ -62,8 +62,8 @@ def generate_input_signal(self):
         elif self.box_typeInputSignal.currentIndex() == 1 and dc != 0:
             isig.input_signal.tt, isig.input_signal.st = isig.generate_triangular_signal( f0, N, dc/100)
 
-    else:
-        print('Error: f0 and dc must be greater than 0')
+    elif self.box_typeInputSignal.currentIndex() != 2 and f0 == 0 and N == 0:
+        print('Error: f0 or dc must be greater than 0')
         return None
     
     if self.check_FAA.isChecked() and fp_FAA != 0:
