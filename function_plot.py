@@ -16,8 +16,6 @@ def plot_signals(self):
     # Define the padding length
     padding_length = self.spin_paddingLength.value()  # Adjust this value as needed
 
-    print('test', len(isig.input_signal.tt), len(isig.input_signal.st), padding_length)
-    
     if len(isig.input_signal.tt) != 0 and len(isig.input_signal.st) != 0 and padding_length != 0:
         print('plot_signals')
         # Add zero padding to the signals
@@ -54,6 +52,8 @@ def generate_input_signal(self):
     N = self.spin_samplesInputSignal.value()
     fs = self.spin_frecControlSignal.value()
     ds = self.spin_dutyControlSignal.value()
+    fp_FAA = self.spin_freqFAA.value()
+    fp_FR = self.spin_freqFR.value()
     
     if f0 != 0 and N != 0:
         if self.box_typeInputSignal.currentIndex() == 0:
@@ -66,17 +66,18 @@ def generate_input_signal(self):
         print('Error: f0 and dc must be greater than 0')
         return None
     
-    if self.check_FAA.isChecked():
+    if self.check_FAA.isChecked() and fp_FAA != 0:
         print('Applying AntiAliasFilter')
-        isig.input_signal.st = ft.AntiAliasFilter(50000, 40, 1, isig.input_signal.st, isig.input_signal.tt)
+        isig.input_signal.st = ft.AntiAliasFilter(fp_FAA, 40, 1, isig.input_signal.st, isig.input_signal.tt)
         
-    if self.check_FR.isChecked():
+    if self.check_FR.isChecked() and fp_FR != 0:
         print('Applying RegenerativeFilter')
-        isig.input_signal.st = ft.RegenerativeFilter(50000, 40, 1, isig.input_signal.st, isig.input_signal.tt)
+        isig.input_signal.st = ft.RegenerativeFilter(fp_FR, 40, 1, isig.input_signal.st, isig.input_signal.tt)
         
-    if self.check_sampleHold.isChecked():
+    if self.check_sampleHold.isChecked() and fs != 0 and ds != 0:
         print('Applying SampleAndHold')
-        isig.input_signal.st = ft.SampleAndHold(isig.input_signal.st, fs, ds, 0 , 0)
+        isig.input_signal.st = ft.SampleAndHold(isig.input_signal.tt , isig.input_signal.st, fs, ds/100, 0 , 0)
+        
     
     plot_signals(self)
     

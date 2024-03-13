@@ -15,7 +15,7 @@ def RegenerativeFilter(cut_frec, Aa, Ap, signal, t):
    return AntiAliasFilter(cut_frec, Aa, Ap, signal, t) #Apply the AntiAliasFilter
    
 
-def SampleAndHold(sig: np.ndarray, fs: float, ds: float, dh=0.0, delay=0) -> np.ndarray:
+def SampleAndHold(t: np.ndarray, sig: np.ndarray, fs: float, ds: float, dh=0.0, delay=0) -> np.ndarray:
     ''' Samples the input signal `sig` with a clk of frequency `fs` and duty cycle `ds`.
     
     Holds the sampled value during the clk's low level.
@@ -26,27 +26,23 @@ def SampleAndHold(sig: np.ndarray, fs: float, ds: float, dh=0.0, delay=0) -> np.
     
     Returns the output signal array.
     '''
-    outSig = []
     # if 0<=ds<=0.9 and 0<=dh<=0.9 and ds+dh<=0.9:
-    tstart = 0; tstop = 1e-3; tnum = 10000                          # Cuidado con el sampling del plot
-    t = np.linspace(tstart, tstop, tnum, endpoint=False)
-    sample_clock = signal.square(2*np.pi*fs*(t-delay/fs), duty=ds/100)
-    hold_clock = signal.square(2*np.pi*fs*t, duty=ds/100+dh)
-    # hold_clock = signal.square(2*np.pi*fs*t, duty=ds+dh*(1-ds))   # Puede usarse si se quiere un duty relativo
-    for i in range(len(sample_clock)):
-        if i < len(sig) and i < len(hold_clock):
-            if sample_clock[i] > 0:
-                outSig.append(sig[i])
-            elif hold_clock[i] > 0:
-                outSig.append(outSig[i-1])
-            else:
-                outSig.append(0)
+    outSig = []
+    sample_clock = signal.square(2*np.pi*fs*t, duty=ds)
+    hold_clock = signal.square(2*np.pi*fs*t, duty=ds+dh)
+    # hold_clock = signal.square(2*np.pi*fs*t, duty=ds+dh*(1-ds))       # Puede usarse si se quiere un duty relativo
+    for i in range(len(t)):
+        if sample_clock[i] > 0:
+            outSig.append(sig[i])
+        elif hold_clock[i] > 0:
+            outSig.append(outSig[i-1])
         else:
             outSig.append(0)
-    tdelay = (int(tnum/((tstop-tstart)*fs)))*delay                  # No es exacto si el clk no es múltiplo del plot sampling
-    outSig = [0]*tdelay + outSig[:-tdelay]
-    
+    if delay > 0:
+        tstep = (t[-1]-t[0])/len(t)
+        tdelay = (int(1/(tstep*fs)))*delay                              # No es exacto si el clk no es múltiplo del plot sampling
+        outSig = [0]*tdelay + outSig[:-tdelay]
     # else:
-    #     print('Duty cycles ds and dh must be such that 0<=ds<=0.9, 0<=dh<=0.9 and ds+dh<=0.9.')
+    #     print('Duty cycles ds and dh must be such that 0<=ds<1, 0<=dh<1 and 0<=ds+dh<1.')
     
     return outSig
