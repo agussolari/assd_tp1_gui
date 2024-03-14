@@ -4,18 +4,10 @@ import numpy as np
 from scipy.io import wavfile
 
 
-class signal:
-    tt = []
-    st = []
-    
-class signal_f:
-    tf = []
-    sf = []
-    
 
     
-input_signal = signal()
-input_signal_f = signal_f()
+
+
 
 # generear una señal senoidal de frecuencia, amplitud y fase configurables
 def generate_sinusoidal_signal(f0, N, a0=1, p0=0):
@@ -37,7 +29,7 @@ def generate_sinusoidal_signal(f0, N, a0=1, p0=0):
     return tt, st
 
 # generear una señal cuadrada de frecuencia, amplitud, fase y duty cycle configurables
-def generate_square_signal(f0, N, dc=1 ,a0=1, p0=0):
+def generate_square_signal(f0, N, dc ,a0=1, p0=0):
     # fs: frecuencia de muestreo
     # f0: frecuencia de la señal
     # N: cantidad de muestras

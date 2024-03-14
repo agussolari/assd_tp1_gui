@@ -4,31 +4,20 @@ import numpy as np
 from PyQt5.QtWidgets import QFileDialog
 import filters as ft
 
-
-def import_audio_file(self):
-    if (self.box_typeInputSignal.currentIndex() == 2):
-        print("Importing file")
-        filename = QFileDialog.getOpenFileName(self, 'Open file', 'c:\\', "WAV files (*.wav)")
-        isig.input_signal.tt, isig.input_signal.st = isig.generate_audio_signal(filename)
-        plot_signals(self)
+def fft_signal(self, signal, time, padding_length):
+    if len(time) != 0 and len(signal) != 0 and padding_length != 0:
+        tf, sf = [], []
+        tf = np.fft.fftfreq(len(np.pad(time, (0, padding_length), 'constant')), np.pad(time, (0, padding_length), 'constant')[1]-np.pad(time, (0, padding_length), 'constant')[0])
+        sf = np.abs(np.fft.fft(np.pad(signal, (0, padding_length), 'constant')))
+    
+        return tf, sf
         
-def plot_signals(self):
-    # Define the padding length
-    padding_length = self.spin_paddingLength.value()  # Adjust this value as needed
-
-    if len(isig.input_signal.tt) != 0 and len(isig.input_signal.st) != 0 and padding_length != 0:
-        print('plot_signals')
-        # Add zero padding to the signals
-        isig.input_signal_f.tt = np.pad(isig.input_signal.tt, (0, padding_length), 'constant')
-        isig.input_signal_f.st = np.pad(isig.input_signal.st, (0, padding_length), 'constant')
-                
-        # compute fft
-        isig.input_signal_f.tf = np.fft.fftfreq(len(isig.input_signal_f.tt), isig.input_signal_f.tt[1]-isig.input_signal_f.tt[0])
-        isig.input_signal_f.sf = np.abs(np.fft.fft(isig.input_signal_f.st))
-        
+    
+def plot_signals(self, tt, st, tf, sf):
+        print('Plotting signals')
         #plot tt and st in "plot_a" QFrame with pyqtgraph
         self.plot_a_time.clear()
-        self.plot_a_time.plot(isig.input_signal.tt, isig.input_signal.st, pen='r')
+        self.plot_a_time.plot(tt, st, pen='r')
         self.plot_a_time.setTitle('Input Signal')
         self.plot_a_time.setLabel('left', 'Amplitude', units='V')
         self.plot_a_time.setLabel('bottom', 'Time', units='s')
@@ -36,7 +25,7 @@ def plot_signals(self):
         
         #plot espectro de la señal en "plot_a_frec" QFrame with pyqtgraph
         self.plot_a_freq.clear()
-        self.plot_a_freq.plot(isig.input_signal_f.tf, isig.input_signal_f.sf, pen='r')
+        self.plot_a_freq.plot(tf, sf, pen='r')
         self.plot_a_freq.setTitle('Input Signal Spectrum')
         self.plot_a_freq.setLabel('left', 'Amplitude', units='V')
         self.plot_a_freq.setLabel('bottom', 'Frequency', units='Hz')
@@ -54,13 +43,28 @@ def generate_input_signal(self):
     ds = self.spin_dutyControlSignal.value()
     fp_FAA = self.spin_freqFAA.value()
     fp_FR = self.spin_freqFR.value()
+    padding_length = self.spin_paddingLength.value()  # Adjust this value as needed
+
     
     if f0 != 0 and N != 0:
         if self.box_typeInputSignal.currentIndex() == 0:
-            isig.input_signal.tt, isig.input_signal.st = isig.generate_sinusoidal_signal(f0, N)
-                                                                      
+            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_sinusoidal_signal(f0, N)
+            
         elif self.box_typeInputSignal.currentIndex() == 1 and dc != 0:
-            isig.input_signal.tt, isig.input_signal.st = isig.generate_triangular_signal( f0, N, dc/100)
+            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_square_signal(f0, N, dc/100)
+                                                                      
+        elif self.box_typeInputSignal.currentIndex() == 2 and dc != 0:
+            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_triangular_signal( f0, N, dc/100)
+        
+        elif (self.box_typeInputSignal.currentIndex() == 3):
+            print("Importing file")
+            filename = QFileDialog.getOpenFileName(self, 'Open file', 'c:\\', "WAV files (*.wav)")
+            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_audio_signal(filename)
+            
+         #Make fft of the input signal
+        self.data.input_signal_f.tt, self.data.input_signal_f.st = fft_signal(self, self.data.input_signal.st, self.data.input_signal.tt, padding_length)
+        plot_signals(self, self.data.input_signal.tt, self.data.input_signal.st, self.data.input_signal_f.tt, self.data.input_signal_f.st)
+
 
     elif self.box_typeInputSignal.currentIndex() != 2 and f0 == 0 and N == 0:
         print('Error: f0 or dc must be greater than 0')
@@ -68,18 +72,30 @@ def generate_input_signal(self):
     
     if self.check_FAA.isChecked() and fp_FAA != 0:
         print('Applying AntiAliasFilter')
-        isig.input_signal.st = ft.AntiAliasFilter(fp_FAA, 40, 1, isig.input_signal.st, isig.input_signal.tt)
+        self.data.input_signal.st = ft.AntiAliasFilter(fp_FAA, 40, 1, self.data.input_signal.st, self.data.input_signal.tt)
+        self.data.input_signal_f.tt, self.data.input_signal_f.st = fft_signal(self, self.data.input_signal.st, self.data.input_signal.tt, padding_length)
         
-    if self.check_FR.isChecked() and fp_FR != 0:
-        print('Applying RegenerativeFilter')
-        isig.input_signal.st = ft.RegenerativeFilter(fp_FR, 40, 1, isig.input_signal.st, isig.input_signal.tt)
+        plot_signals(self, self.data.input_signal.tt, self.data.input_signal.st, self.data.input_signal_f.tt, self.data.input_signal_f.st)
+        
         
     if self.check_sampleHold.isChecked() and fs != 0 and ds != 0:
         print('Applying SampleAndHold')
-        isig.input_signal.st = ft.SampleAndHold(isig.input_signal.tt , isig.input_signal.st, fs, ds/100, 0 , 0)
+        self.data.sample_signal.st = ft.SampleAndHold(self.data.input_signal.tt , self.data.input_signal.st, fs, ds/100, 0 , 0)
+        self.data.sample_signal.tt = self.data.input_signal.tt
+        self.data.sample_signal_f.tt, self.data.sample_signal_f.st = fft_signal(self, self.data.sample_signal.st, self.data.input_signal.tt, padding_length)
+        
+        plot_signals(self, self.data.sample_signal.tt, self.data.sample_signal.st, self.data.sample_signal_f.tt, self.data.sample_signal_f.st)
+        
+        
+    if self.check_FR.isChecked() and fp_FR != 0 and len(self.data.sample_signal.tt) != 0 and len(self.data.sample_signal.st) != 0:
+        print('Applying RegenerativeFilter')
+        self.data.sample_signal.st = ft.RegenerativeFilter(fp_FR, 40, 1, self.data.sample_signal.st, self.data.sample_signal.tt)
+        self.data.sample_signal_f.tt, self.data.sample_signal_f.st = fft_signal(self, self.data.sample_signal.st, self.data.sample_signal.tt, padding_length)
+        
+        plot_signals(self, self.data.sample_signal.tt, self.data.sample_signal.st, self.data.sample_signal_f.tt, self.data.sample_signal_f.st)
         
     
-    plot_signals(self)
+    
     
                 
 

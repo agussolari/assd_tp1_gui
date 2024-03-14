@@ -1,5 +1,7 @@
 import subprocess
 import function_plot as fp
+import input_signals as isig
+
 
 
 subprocess.run(["pyuic5", "-x", "qt_gui.ui", "-o", "py_gui.py"])
@@ -14,7 +16,25 @@ from py_gui import Ui_MainWindow
 
 from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 
+class signal:
+    tt = []
+    st = []
+    
+class signal_f:
+    tf = []
+    sf = []
 
+class data_class:
+    def __init__(self):
+        self.input_signal = signal()
+        self.input_signal_f = signal_f()
+        
+        self.sample_signal = signal()
+        self.sample_signal_f = signal_f()
+        
+    
+
+    
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -26,6 +46,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         
         self.setWindowTitle('ASSD - GUI - Muestreo de señales')
+        
+        self.data = data_class()
         
         self.show()
         
@@ -50,7 +72,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.spin_samplesInputSignal.valueChanged.connect(lambda: fp.generate_input_signal(self))
         self.spin_paddingLength.valueChanged.connect(lambda: fp.generate_input_signal(self))
         
-        self.import_button.clicked.connect(lambda: fp.import_audio_file(self))
+        self.import_button.clicked.connect(lambda: fp.generate_input_signal(self))
         
 
 
