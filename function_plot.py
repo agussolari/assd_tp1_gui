@@ -40,7 +40,8 @@ def generate_input_signal(self):
     dc = self.spin_dutyInputSignal.value()
     N = self.spin_samplesInputSignal.value()
     fs = self.spin_frecControlSignal.value()
-    ds = self.spin_dutyControlSignal.value()
+    dsh = self.spin_dutyControlSignalSH.value()
+    das = self.spin_dutyControlSignalAS.value()
     fp_FAA = self.spin_freqFAA.value()
     fp_FR = self.spin_freqFR.value()
     padding_length = self.spin_paddingLength.value()  # Adjust this value as needed
@@ -78,17 +79,26 @@ def generate_input_signal(self):
         plot_signals(self, self.data.input_signal.tt, self.data.input_signal.st, self.data.input_signal_f.tt, self.data.input_signal_f.st)
         
         
-    if self.check_sampleHold.isChecked() and fs != 0 and ds != 0:
+    if self.check_sampleHold.isChecked() and fs != 0 and dsh != 0 and not self.check_analogSwitch.isChecked():
         print('Applying SampleAndHold')
-        self.data.sample_signal.st = ft.SampleAndHold(self.data.input_signal.tt , self.data.input_signal.st, fs, ds/100, 0 , 0)
+        self.data.sample_signal.st = ft.SampleAndHold(self.data.input_signal.tt , self.data.input_signal.st, fs, dsh/100)
         self.data.sample_signal.tt = self.data.input_signal.tt
         self.data.sample_signal_f.tt, self.data.sample_signal_f.st = fft_signal(self, self.data.sample_signal.st, self.data.input_signal.tt, padding_length)
         
         plot_signals(self, self.data.sample_signal.tt, self.data.sample_signal.st, self.data.sample_signal_f.tt, self.data.sample_signal_f.st)
+
+    if self.check_analogSwitch.isChecked() and fs != 0 and das != 0:
+        print('Applying AnalogSwitch')
+        if self.check_sampleHold.isChecked():           # Hay que ver como guardamos etapas intermedias
+            self.data.input_signal.st = ft.SampleAndHold(self.data.input_signal.tt , self.data.input_signal.st, fs, dsh/100)
+        self.data.sample_signal.st = ft.AnalogSwitch(self.data.input_signal.tt , self.data.input_signal.st, fs, das/100)
+        self.data.sample_signal.tt = self.data.input_signal.tt
+        self.data.sample_signal_f.tt, self.data.sample_signal_f.st = fft_signal(self, self.data.sample_signal.st, self.data.input_signal.tt, padding_length)
         
-        
+        plot_signals(self, self.data.sample_signal.tt, self.data.sample_signal.st, self.data.sample_signal_f.tt, self.data.sample_signal_f.st)
+
     if self.check_FR.isChecked() and fp_FR != 0 and len(self.data.sample_signal.tt) != 0 and len(self.data.sample_signal.st) != 0:
-        print('Applying RegenerativeFilter')
+        print('Applying RegenerativeFilter')            # Algo esta mal con el filtro recuperador
         self.data.sample_signal.st = ft.RegenerativeFilter(fp_FR, 40, 1, self.data.sample_signal.st, self.data.sample_signal.tt)
         self.data.sample_signal_f.tt, self.data.sample_signal_f.st = fft_signal(self, self.data.sample_signal.st, self.data.sample_signal.tt, padding_length)
         

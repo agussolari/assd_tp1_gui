@@ -65,9 +65,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.check_FR.toggled.connect(lambda: fp.generate_input_signal(self))
         self.spin_freqFR.valueChanged.connect(lambda: fp.generate_input_signal(self))
         
-        self.check_sampleHold.toggled.connect(lambda: fp.generate_input_signal(self))
         self.spin_frecControlSignal.valueChanged.connect(lambda: fp.generate_input_signal(self))
-        self.spin_dutyControlSignal.valueChanged.connect(lambda: fp.generate_input_signal(self))
+        self.check_sampleHold.toggled.connect(lambda: fp.generate_input_signal(self))
+        self.spin_dutyControlSignalSH.valueChanged.connect(lambda: fp.generate_input_signal(self))
+        self.check_analogSwitch.toggled.connect(lambda: fp.generate_input_signal(self))
+        self.spin_dutyControlSignalAS.valueChanged.connect(lambda: fp.generate_input_signal(self))
         
         self.spin_samplesInputSignal.valueChanged.connect(lambda: fp.generate_input_signal(self))
         self.spin_paddingLength.valueChanged.connect(lambda: fp.generate_input_signal(self))
