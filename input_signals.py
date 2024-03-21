@@ -119,22 +119,25 @@ def generate_impulse_signal(fs, N, a0=1):
 #Sample wav audio file to tt and st
 def generate_audio_signal(filename):
 
-    # cargo el archivo .wav
-    fs, data = wavfile.read(filename[0])
-    # genero el vector de tiempos
-    tt = np.linspace(0, len(data)/fs, len(data))
-    # genero la señal
-    if len(data.shape) > 1:
-        st = np.mean(data, axis=1)
-        print("Audio file has more than one channel, using the mean of all channels")
+    if filename[0] == '':
+        print("No file selected")
+        return [], []
     else:
-        st = data
-        print("Audio file has only one channel")
+        # cargo el archivo .wav
+        fs, data = wavfile.read(filename[0])
+        # genero el vector de tiempos
+        tt = np.linspace(0, len(data)/fs, len(data))
+        # genero la señal
+        if len(data.shape) > 1:
+            st = np.mean(data, axis=1)
+            print("Audio file has more than one channel, using the mean of all channels")
+        else:
+            st = data
+            print("Audio file has only one channel")
 
     
-    
-    
-    return list(tt), list(st)
+        
+        return list(tt), list(st)
     
 
 #main

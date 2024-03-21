@@ -97,6 +97,9 @@
      <property name="title">
       <string>Señal de Entrada</string>
      </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
      <widget class="QComboBox" name="box_typeInputSignal">
       <property name="geometry">
        <rect>
@@ -107,7 +110,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>-1</number>
       </property>
       <item>
        <property name="text">
@@ -190,7 +193,7 @@
      </widget>
      <widget class="QPushButton" name="import_button">
       <property name="enabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="geometry">
        <rect>
@@ -199,6 +202,9 @@
         <width>125</width>
         <height>28</height>
        </rect>
+      </property>
+      <property name="mouseTracking">
+       <bool>false</bool>
       </property>
       <property name="text">
        <string>Import Audio [WAV]</string>

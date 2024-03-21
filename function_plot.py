@@ -31,6 +31,10 @@ def plot_signals(self, tt, st, tf, sf):
         self.plot_a_freq.setLabel('bottom', 'Frequency', units='Hz')
         self.plot_a_freq.showGrid(x=True, y=True)
         
+def import_file(self):
+    print("Importing file")
+    filename = QFileDialog.getOpenFileName(self, 'Open file', 'c:\\', "WAV files (*.wav)")
+    self.data.input_signal.tt, self.data.input_signal.st = isig.generate_audio_signal(filename)
 
 
 
@@ -58,9 +62,13 @@ def generate_input_signal(self):
             self.data.input_signal.tt, self.data.input_signal.st = isig.generate_triangular_signal( f0, N, dc/100)
         
         elif (self.box_typeInputSignal.currentIndex() == 3):
-            print("Importing file")
-            filename = QFileDialog.getOpenFileName(self, 'Open file', 'c:\\', "WAV files (*.wav)")
-            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_audio_signal(filename)
+            self.import_button.setEnabled(True)
+            self.import_button.clicked.connect(lambda: import_file(self))
+            
+
+        elif ( self.box_typeInputSignal.currentIndex() != 3):
+            self.import_button.setEnabled(False)
+            
             
          #Make fft of the input signal
         self.data.input_signal_f.tt, self.data.input_signal_f.st = fft_signal(self, self.data.input_signal.st, self.data.input_signal.tt, padding_length)
@@ -73,7 +81,7 @@ def generate_input_signal(self):
     
     if self.check_FAA.isChecked() and fp_FAA != 0:
         print('Applying AntiAliasFilter')
-        self.data.input_signal.st = ft.AntiAliasFilter(fp_FAA, 40, 1, self.data.input_signal.st, self.data.input_signal.tt)
+        self.data.input_signal.st = ft.AntiAliasFilter(fp_FAA, self.data.input_signal.st, self.data.input_signal.tt)
         self.data.input_signal_f.tt, self.data.input_signal_f.st = fft_signal(self, self.data.input_signal.st, self.data.input_signal.tt, padding_length)
         
         plot_signals(self, self.data.input_signal.tt, self.data.input_signal.st, self.data.input_signal_f.tt, self.data.input_signal_f.st)
@@ -99,7 +107,7 @@ def generate_input_signal(self):
 
     if self.check_FR.isChecked() and fp_FR != 0 and len(self.data.sample_signal.tt) != 0 and len(self.data.sample_signal.st) != 0:
         print('Applying RegenerativeFilter')            # Algo esta mal con el filtro recuperador
-        self.data.sample_signal.st = ft.RegenerativeFilter(fp_FR, 40, 1, self.data.sample_signal.st, self.data.sample_signal.tt)
+        self.data.sample_signal.st = ft.RegenerativeFilter(fp_FR, self.data.sample_signal.st, self.data.sample_signal.tt)
         self.data.sample_signal_f.tt, self.data.sample_signal_f.st = fft_signal(self, self.data.sample_signal.st, self.data.sample_signal.tt, padding_length)
         
         plot_signals(self, self.data.sample_signal.tt, self.data.sample_signal.st, self.data.sample_signal_f.tt, self.data.sample_signal_f.st)

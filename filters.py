@@ -1,20 +1,18 @@
 import numpy as np
-from scipy.signal import ellip, lsim
+from scipy.signal import ellip, lsim, cheby1, cheb1ord
 import scipy.signal as signal
 
-def AntiAliasFilter(cut_frec, Aa, Ap, signal, t): 
-    """
-    Apply a 4th Order low-pass Cauer filter with fc = cut_frec to the input signal. 
+def AntiAliasFilter(fp, signal, t): 
+    N, wn = cheb1ord(2*np.pi*fp, 2*np.pi*fp*1.1, 1, 40, analog=True) #Calculate the order and wn of the filter
+
     
-    Ap is the maximun attenuation in the passband and Aa is the minimun attenuation in the stopband 
-    """
-    a,b = ellip(4, Ap, Aa, 2*np.pi*cut_frec, 'low', analog=True, output='ba') #Cauer Filter 4th order
+
+    a,b = cheby1(N, 1 , wn, btype='low', analog=True, output='ba')
     tout, yout, xout = lsim((a,b), signal, t) #Apply the filter to the signal
     return yout
 
-def RegenerativeFilter(cut_frec, Aa, Ap, signal, t):
-   return AntiAliasFilter(cut_frec, Aa, Ap, signal, t) #Apply the AntiAliasFilter
-   
+def RegenerativeFilter(fp, signal, t):
+   return AntiAliasFilter(fp, signal, t) #Apply the AntiAliasFilter
 
 def SampleAndHold(t: np.ndarray, sig: np.ndarray, fs: float, ds: float) -> np.ndarray:
     """

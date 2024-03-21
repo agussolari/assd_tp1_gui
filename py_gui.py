@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\qt_gui.ui'
+# Form implementation generated from reading ui file 'qt_gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -45,6 +45,7 @@ class Ui_MainWindow(object):
         self.box_centralBox.setObjectName("box_centralBox")
         self.box_inputSignals = QtWidgets.QGroupBox(self.box_centralBox)
         self.box_inputSignals.setGeometry(QtCore.QRect(10, 20, 311, 181))
+        self.box_inputSignals.setFlat(False)
         self.box_inputSignals.setObjectName("box_inputSignals")
         self.box_typeInputSignal = QtWidgets.QComboBox(self.box_inputSignals)
         self.box_typeInputSignal.setGeometry(QtCore.QRect(10, 20, 89, 31))
@@ -70,8 +71,9 @@ class Ui_MainWindow(object):
         self.spin_dutyInputSignal.setProperty("value", 50)
         self.spin_dutyInputSignal.setObjectName("spin_dutyInputSignal")
         self.import_button = QtWidgets.QPushButton(self.box_inputSignals)
-        self.import_button.setEnabled(True)
+        self.import_button.setEnabled(False)
         self.import_button.setGeometry(QtCore.QRect(180, 20, 125, 28))
+        self.import_button.setMouseTracking(False)
         self.import_button.setCheckable(False)
         self.import_button.setAutoDefault(False)
         self.import_button.setDefault(False)
@@ -163,7 +165,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
-        self.box_typeInputSignal.setCurrentIndex(2)
+        self.box_typeInputSignal.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
