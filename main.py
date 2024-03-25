@@ -59,7 +59,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
 
     def connect_signals(self):
-        print('connect_signals')
         self.spin_frecInputSignal.valueChanged.connect(lambda: fp.generate_node_signal(self))
         self.spin_dutyInputSignal.valueChanged.connect(lambda: fp.generate_node_signal(self))
         self.box_typeInputSignal.currentIndexChanged.connect(lambda: fp.generate_node_signal(self))
@@ -88,6 +87,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.check_customAS.toggled.connect(lambda: fp.generate_node_signal(self))
         self.check_customRF.toggled.connect(lambda: fp.generate_node_signal(self))
 
+        self.import_button.clicked.connect(lambda: fp.import_file(self))
 
         
 

@@ -37,7 +37,7 @@ def fft_signal(self, signal, time, padding_length):
     
         return tf, sf
 
-def plot_signals(self, tt, st, tf, sf, node, custom=False):
+def plot_signals(self, tt, st, tf, sf, node, custom=False, color = 'r'):
     if (custom):
         NodeTimePlot = self.plot_a_time_custom
         NodeFreqPlot = self.plot_a_freq_custom
@@ -48,7 +48,7 @@ def plot_signals(self, tt, st, tf, sf, node, custom=False):
     # print('Plotting signals')
     #plot tt and st in "plot_a" QFrame with pyqtgraph
     NodeTimePlot[node].clear()
-    NodeTimePlot[node].plot(tt, st, pen='r')
+    NodeTimePlot[node].plot(tt, st, pen=color)
     NodeTimePlot[node].setTitle(NodePlotTitle[node])
     NodeTimePlot[node].setLabel('left', 'Amplitude', units='V')
     NodeTimePlot[node].setLabel('bottom', 'Time', units='s')
@@ -56,16 +56,17 @@ def plot_signals(self, tt, st, tf, sf, node, custom=False):
     
     #plot espectro de la señal en "plot_a_frec" QFrame with pyqtgraph
     NodeFreqPlot[node].clear()
-    NodeFreqPlot[node].plot(tf, sf, pen='r')
+    NodeFreqPlot[node].plot(tf, sf, pen=color)
     NodeFreqPlot[node].setTitle(NodePlotTitle[node]+' Spectrum')
     NodeFreqPlot[node].setLabel('left', 'Amplitude', units='V')
     NodeFreqPlot[node].setLabel('bottom', 'Frequency', units='Hz')
     NodeFreqPlot[node].showGrid(x=True, y=True)
         
 def import_file(self):
-    print("Importing file")
     filename = QFileDialog.getOpenFileName(self, 'Open file', 'c:\\', "WAV files (*.wav)")
     self.data.input_signal.tt, self.data.input_signal.st = isig.generate_audio_signal(filename)
+    
+    generate_node_signal(self)
 
 
 
@@ -85,8 +86,8 @@ def generate_node_signal(self):
         if self.box_typeInputSignal.currentIndex() == 0:
             self.data.input_signal.tt, self.data.input_signal.st = isig.generate_sinusoidal_signal(f0, N)
 
-        elif self.box_typeInputSignal.currentIndex() == 1 and dc != 0:
-            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_square_signal(f0, N, dc/100)
+        elif self.box_typeInputSignal.currentIndex() == 1:
+            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_exponential_signal(f0,N)
 
         elif self.box_typeInputSignal.currentIndex() == 2 and dc != 0:
             self.data.input_signal.tt, self.data.input_signal.st = isig.generate_triangular_signal(f0, N, dc/100)
@@ -94,20 +95,10 @@ def generate_node_signal(self):
         elif self.box_typeInputSignal.currentIndex() == 3 and dc != 0:
             self.data.input_signal.tt, self.data.input_signal.st = isig.generate_square_signal(f0, N, dc/100)
 
-        elif self.box_typeInputSignal.currentIndex() == 4 and dc != 0:
-            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_triangular_signal(f0, N, dc/100)
-
-        elif self.box_typeInputSignal.currentIndex() == 5 and dc != 0:
-            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_square_signal(f0, N, dc/100)
-
-        elif self.box_typeInputSignal.currentIndex() == 6 and dc != 0:
-            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_triangular_signal( f0, N, dc/100)
-
-        elif self.box_typeInputSignal.currentIndex() == 7:
+        elif self.box_typeInputSignal.currentIndex() == 4:
             self.import_button.setEnabled(True)
-            self.import_button.clicked.connect(lambda: import_file(self))
 
-        elif ( self.box_typeInputSignal.currentIndex() != 7):
+        elif ( self.box_typeInputSignal.currentIndex() != 4):
             self.import_button.setEnabled(False)
 
 
@@ -119,53 +110,74 @@ def generate_node_signal(self):
 
 
     elif self.box_typeInputSignal.currentIndex() != 3 and f0 == 0 and N == 0:
-        print('Error: f0 or dc must be greater than 0')
         return None
 
     self.data.aaf_signal.st = self.data.input_signal.st
     if self.check_AAF.isChecked() and fp_AAF != 0:              # Hace falta chequear f=0 o ploteamos igual
-        print('Applying AntiAliasFilter')
         self.data.aaf_signal.st = ft.AntiAliasFilter(fp_AAF, self.data.input_signal.st, self.data.input_signal.tt)
     self.data.aaf_signal.tf, self.data.aaf_signal.sf = fft_signal(self, self.data.aaf_signal.st, self.data.input_signal.tt, padding_length)
     self.data.aaf_signal.sf = self.data.aaf_signal.sf/N
-    plot_signals(self, self.data.input_signal.tt, self.data.aaf_signal.st, self.data.aaf_signal.tf, self.data.aaf_signal.sf, Node.AAF)
+    plot_signals(self, self.data.input_signal.tt, self.data.aaf_signal.st, self.data.aaf_signal.tf, self.data.aaf_signal.sf, Node.AAF, color = 'g')
 
     self.data.sh_signal.st = self.data.aaf_signal.st
     if self.check_sampleHold.isChecked() and fs != 0 and dsh != 0:
-        print('Applying SampleAndHold')
         self.data.sh_signal.st = ft.SampleAndHold(self.data.input_signal.tt , self.data.aaf_signal.st, fs, dsh/100)
     self.data.sh_signal.tf, self.data.sh_signal.sf = fft_signal(self, self.data.sh_signal.st, self.data.input_signal.tt, padding_length)
     self.data.sh_signal.sf = self.data.sh_signal.sf/N    
-    plot_signals(self, self.data.input_signal.tt, self.data.sh_signal.st, self.data.sh_signal.tf, self.data.sh_signal.sf, Node.SH)
+    plot_signals(self, self.data.input_signal.tt, self.data.sh_signal.st, self.data.sh_signal.tf, self.data.sh_signal.sf, Node.SH, color = 'b')
 
     self.data.as_signal.st = self.data.sh_signal.st
     if self.check_analogSwitch.isChecked() and fs != 0 and das != 0:
-        print('Applying AnalogSwitch')
-        self.data.as_signal.st = ft.AnalogSwitch(self.data.input_signal.tt , self.data.sh_signal.st, fs, das/100)
+        self.data.as_signal.st = 0.5 * ft.AnalogSwitch(self.data.input_signal.tt , self.data.sh_signal.st, fs, das/100)
     self.data.as_signal.tf, self.data.as_signal.sf = fft_signal(self, self.data.as_signal.st, self.data.input_signal.tt, padding_length)
     self.data.as_signal.sf = self.data.as_signal.sf/N
-    plot_signals(self, self.data.input_signal.tt, self.data.as_signal.st, self.data.as_signal.tf, self.data.as_signal.sf, Node.AS)
+    plot_signals(self, self.data.input_signal.tt, self.data.as_signal.st, self.data.as_signal.tf, self.data.as_signal.sf, Node.AS , color = 'y')
 
     self.data.rf_signal.st = self.data.as_signal.st
     if self.check_RF.isChecked() and fp_RF != 0:    # and len(self.data.sample_signal.tt) != 0 and len(self.data.sample_signal.st) != 0:
-        print('Applying RegenerativeFilter')            # Algo esta mal con el filtro recuperador
         self.data.rf_signal.st = ft.RegenerativeFilter(fp_RF, self.data.as_signal.st, self.data.input_signal.tt)
     self.data.rf_signal.tf, self.data.rf_signal.sf = fft_signal(self, self.data.rf_signal.st, self.data.input_signal.tt, padding_length)
     self.data.rf_signal.sf = self.data.rf_signal.sf/N
-    plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.RF)
+    plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.RF, color = 'm')
 
     if self.tab_plots.currentIndex() == 5:
         self.box_custom.setEnabled(True)
-        print('TEST')
+        
+        self.plot_a_time_custom.clear()
+        self.plot_a_time_custom.setTitle('Input Signal')
+        self.plot_a_time_custom.setLabel('left', 'Amplitude', units='V')
+        self.plot_a_time_custom.setLabel('bottom', 'Time', units='s')
+        self.plot_a_time_custom.showGrid(x=True, y=True)
+        
+        self.plot_a_freq_custom.clear()
+        self.plot_a_freq_custom.setTitle('Input Signal Spectrum')
+        self.plot_a_freq_custom.setLabel('left', 'Amplitude', units='V')
+        self.plot_a_freq_custom.setLabel('bottom', 'Frequency', units='Hz')
+        self.plot_a_freq_custom.showGrid(x=True, y=True)
+        
         if self.check_customInput.isChecked():
-            plot_signals(self, self.data.input_signal.tt, self.data.input_signal.st, self.data.input_signal.tf, self.data.input_signal.sf, Node.IN, True)
+            plot_custom(self, self.data.input_signal.tt, self.data.input_signal.st, self.data.input_signal.tf, self.data.input_signal.sf, 'r')
+                        
         if self.check_customAAF.isChecked():
-            plot_signals(self, self.data.input_signal.tt, self.data.aaf_signal.st, self.data.aaf_signal.tf, self.data.aaf_signal.sf, Node.AAF, True)
+            plot_custom(self, self.data.input_signal.tt, self.data.aaf_signal.st, self.data.aaf_signal.tf, self.data.aaf_signal.sf, 'g')
+        
         if self.check_customSH.isChecked():
-            plot_signals(self, self.data.input_signal.tt, self.data.sh_signal.st, self.data.sh_signal.tf, self.data.sh_signal.sf, Node.SH, True)
+            plot_custom(self, self.data.input_signal.tt, self.data.sh_signal.st, self.data.sh_signal.tf, self.data.sh_signal.sf, 'b')
+               
         if self.check_customAS.isChecked():
-            plot_signals(self, self.data.input_signal.tt, self.data.as_signal.st, self.data.as_signal.tf, self.data.as_signal.sf, Node.AS, True)
+            plot_custom(self, self.data.input_signal.tt, self.data.as_signal.st, self.data.as_signal.tf, self.data.as_signal.sf, 'y')
+
+               
         if self.check_customRF.isChecked():
-            plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.RF, True)
+            plot_custom(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, 'm')
+
     else:
-        self.box_custom.setEnabled(False)
+        self.box_custom.setEnabled(False)   
+        
+def plot_custom (self, tt ,st, tf, sf, color = 'r'):
+    #plot tt and st in "plot_a" QFrame with pyqtgraph
+    self.plot_a_time_custom.plot(tt, st, pen=color)
+
+    
+    #plot espectro de la señal en "plot_a_frec" QFrame with pyqtgraph
+    self.plot_a_freq_custom.plot(tf, sf, pen=color)

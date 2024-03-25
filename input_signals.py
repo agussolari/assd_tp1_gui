@@ -66,7 +66,7 @@ def generate_triangular_signal( f0, N, dc, a0=1, p0=0):
     return tt, st
 
 # generear una señal exponencial de frecuencia, amplitud y fase configurables
-def generate_exponential_signal(fs, f0, N, a0=1, p0=0, tau=1):
+def generate_exponential_signal( f0, N, a0=1, p0=0, tau=1):
     # fs: frecuencia de muestreo
     # f0: frecuencia de la señal
     # N: cantidad de muestras
@@ -77,9 +77,8 @@ def generate_exponential_signal(fs, f0, N, a0=1, p0=0, tau=1):
     # calculo el periodo de la señal
     T0 = 1/f0
     # calculo el periodo de muestreo
-    Ts = 1/fs
     # genero el vector de tiempos
-    tt = np.linspace(0, 2*T0, N)
+    tt = np.linspace(0, 10*T0, N)
     # genero la señal
     st = a0 * np.exp(-tt/tau) * np.sin(2*np.pi*f0*tt + p0)
 
@@ -137,7 +136,7 @@ def generate_audio_signal(filename):
 
     
         
-        return list(tt), list(st)
+        return np.array(tt), np.array(st)
     
 
 #main
