@@ -37,9 +37,13 @@ def fft_signal(self, signal, time, padding_length):
     
         return tf, sf
 
-def plot_signals(self, tt, st, tf, sf, node):
-    NodeTimePlot = [self.plot_a_time_in, self.plot_a_time_aaf, self.plot_a_time_sh, self.plot_a_time_as, self.plot_a_time_rf]
-    NodeFreqPlot = [self.plot_a_freq_in, self.plot_a_freq_aaf, self.plot_a_freq_sh, self.plot_a_freq_as, self.plot_a_freq_rf]
+def plot_signals(self, tt, st, tf, sf, node, custom=False):
+    if (custom):
+        NodeTimePlot = self.plot_a_time_custom
+        NodeFreqPlot = self.plot_a_freq_custom
+    else:
+        NodeTimePlot = [self.plot_a_time_in, self.plot_a_time_aaf, self.plot_a_time_sh, self.plot_a_time_as, self.plot_a_time_rf]
+        NodeFreqPlot = [self.plot_a_freq_in, self.plot_a_freq_aaf, self.plot_a_freq_sh, self.plot_a_freq_as, self.plot_a_freq_rf]
 
     # print('Plotting signals')
     #plot tt and st in "plot_a" QFrame with pyqtgraph
@@ -151,16 +155,17 @@ def generate_node_signal(self):
     plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.RF)
 
     if self.tab_plots.currentIndex() == 5: 
+        print('TEST')
         if self.check_customInput.isChecked():
-            plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.IN)
+            plot_signals(self, self.data.input_signal.tt, self.data.input_signal.st, self.data.input_signal.tf, self.data.input_signal.sf, Node.IN, True)
         if self.check_customAAF.isChecked():
-            plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.AAF)
+            plot_signals(self, self.data.input_signal.tt, self.data.aaf_signal.st, self.data.aaf_signal.tf, self.data.aaf_signal.sf, Node.AAF, True)
         if self.check_customSH.isChecked():
-            plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.SH)
+            plot_signals(self, self.data.input_signal.tt, self.data.sh_signal.st, self.data.sh_signal.tf, self.data.sh_signal.sf, Node.SH, True)
         if self.check_customAS.isChecked():
-            plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.AS)
+            plot_signals(self, self.data.input_signal.tt, self.data.as_signal.st, self.data.as_signal.tf, self.data.as_signal.sf, Node.AS, True)
         if self.check_customRF.isChecked():
-            plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.RF)
+            plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.RF, True)
         
     if self.tab_plots.currentIndex() == 5:
         self.box_custom.setEnabled(True)

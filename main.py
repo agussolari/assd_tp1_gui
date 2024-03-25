@@ -82,7 +82,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
         self.tab_plots.currentChanged.connect(lambda: fp.generate_node_signal(self))
         
-        self.import_button.clicked.connect(lambda: fp.import_file)
+        self.check_customInput.toggled.connect(lambda: fp.generate_node_signal(self))
+        self.check_customAAF.toggled.connect(lambda: fp.generate_node_signal(self))
+        self.check_customSH.toggled.connect(lambda: fp.generate_node_signal(self))
+        self.check_customAS.toggled.connect(lambda: fp.generate_node_signal(self))
+        self.check_customRF.toggled.connect(lambda: fp.generate_node_signal(self))
+
 
         
 
