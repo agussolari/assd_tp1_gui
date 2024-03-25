@@ -154,7 +154,8 @@ def generate_node_signal(self):
     self.data.rf_signal.sf = self.data.rf_signal.sf/N
     plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.RF)
 
-    if self.tab_plots.currentIndex() == 5: 
+    if self.tab_plots.currentIndex() == 5:
+        self.box_custom.setEnabled(True)
         print('TEST')
         if self.check_customInput.isChecked():
             plot_signals(self, self.data.input_signal.tt, self.data.input_signal.st, self.data.input_signal.tf, self.data.input_signal.sf, Node.IN, True)
@@ -166,8 +167,5 @@ def generate_node_signal(self):
             plot_signals(self, self.data.input_signal.tt, self.data.as_signal.st, self.data.as_signal.tf, self.data.as_signal.sf, Node.AS, True)
         if self.check_customRF.isChecked():
             plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.RF, True)
-        
-    if self.tab_plots.currentIndex() == 5:
-        self.box_custom.setEnabled(True)
     else:
         self.box_custom.setEnabled(False)
