@@ -16,26 +16,30 @@ from py_gui import Ui_MainWindow
 
 from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 
-class signal:
+class SignalData:
+    """Class for storing signal information"""
     tt = []
     st = []
-    
-class signal_f:
     tf = []
     sf = []
 
-class data_class:
+class SignalsData:
+    """Class for storing signals in each node of the sampling process"""
     def __init__(self):
-        self.input_signal = signal()
-        self.input_signal_f = signal_f()
-        
-        self.sample_signal = signal()
-        self.sample_signal_f = signal_f()
-        
-    
+        self.input_signal = SignalData()
+        self.aaf_signal = SignalData()
+        self.sh_signal = SignalData()
+        self.as_signal = SignalData()
+        self.rf_signal = SignalData()
 
-    
-
+# class SampledSignalNodes:
+#     """Class for storing signals in each node of the sampling process"""
+#     def __init__(self, inSig: NodeSignal, aafSig: NodeSignal, shSig: NodeSignal, asSig: NodeSignal, rfSig: NodeSignal):
+#         self.inSig = inSig
+#         self.aafSig = aafSig
+#         self.shSig = shSig
+#         self.asSig = asSig
+#         self.sfrfSig = rfSig
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     
@@ -47,7 +51,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
         self.setWindowTitle('ASSD - GUI - Muestreo de señales')
         
-        self.data = data_class()
+        self.data = SignalsData()
         
         self.show()
         
@@ -56,25 +60,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def connect_signals(self):
         print('connect_signals')
-        self.spin_frecInputSignal.valueChanged.connect(lambda: fp.generate_input_signal(self))
-        self.spin_dutyInputSignal.valueChanged.connect(lambda: fp.generate_input_signal(self))
-        self.box_typeInputSignal.currentIndexChanged.connect(lambda: fp.generate_input_signal(self))
-        
-        self.check_FAA.toggled.connect(lambda: fp.generate_input_signal(self))
-        self.spin_freqFAA.valueChanged.connect(lambda: fp.generate_input_signal(self))
-        self.check_FR.toggled.connect(lambda: fp.generate_input_signal(self))
-        self.spin_freqFR.valueChanged.connect(lambda: fp.generate_input_signal(self))
-        
-        self.spin_frecControlSignal.valueChanged.connect(lambda: fp.generate_input_signal(self))
-        self.check_sampleHold.toggled.connect(lambda: fp.generate_input_signal(self))
-        self.spin_dutyControlSignalSH.valueChanged.connect(lambda: fp.generate_input_signal(self))
-        self.check_analogSwitch.toggled.connect(lambda: fp.generate_input_signal(self))
-        self.spin_dutyControlSignalAS.valueChanged.connect(lambda: fp.generate_input_signal(self))
-        
-        self.spin_samplesInputSignal.valueChanged.connect(lambda: fp.generate_input_signal(self))
-        self.spin_paddingLength.valueChanged.connect(lambda: fp.generate_input_signal(self))
-        
-        self.import_button.clicked.connect(lambda: fp.generate_input_signal(self))
+        self.spin_frecInputSignal.valueChanged.connect(lambda: fp.generate_node_signal(self))
+        self.spin_dutyInputSignal.valueChanged.connect(lambda: fp.generate_node_signal(self))
+        self.box_typeInputSignal.currentIndexChanged.connect(lambda: fp.generate_node_signal(self))
+
+        self.check_AAF.toggled.connect(lambda: fp.generate_node_signal(self))
+        self.spin_freqAAF.valueChanged.connect(lambda: fp.generate_node_signal(self))
+        self.check_RF.toggled.connect(lambda: fp.generate_node_signal(self))
+        self.spin_freqRF.valueChanged.connect(lambda: fp.generate_node_signal(self))
+
+        self.spin_frecControlSignal.valueChanged.connect(lambda: fp.generate_node_signal(self))
+        self.check_sampleHold.toggled.connect(lambda: fp.generate_node_signal(self))
+        self.spin_dutyControlSignalSH.valueChanged.connect(lambda: fp.generate_node_signal(self))
+        self.check_analogSwitch.toggled.connect(lambda: fp.generate_node_signal(self))
+        self.spin_dutyControlSignalAS.valueChanged.connect(lambda: fp.generate_node_signal(self))
+
+        self.spin_samplesInputSignal.valueChanged.connect(lambda: fp.generate_node_signal(self))
+        self.spin_paddingLength.valueChanged.connect(lambda: fp.generate_node_signal(self))
+
+        self.import_button.clicked.connect(lambda: fp.generate_node_signal(self))
         self.import_button.clicked.connect(lambda: fp.import_file)
 
         

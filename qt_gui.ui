@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTabWidget" name="tabWidget">
+   <widget class="QTabWidget" name="tab_plots">
     <property name="geometry">
      <rect>
       <x>350</x>
@@ -23,17 +23,26 @@
       <height>661</height>
      </rect>
     </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="tabPosition">
+     <enum>QTabWidget::North</enum>
+    </property>
+    <property name="tabShape">
+     <enum>QTabWidget::Rounded</enum>
+    </property>
     <property name="currentIndex">
      <number>0</number>
     </property>
-    <widget class="QWidget" name="tab">
+    <widget class="QWidget" name="tab_in">
      <property name="accessibleName">
       <string/>
      </property>
      <attribute name="title">
-      <string>A</string>
+      <string>Input</string>
      </attribute>
-     <widget class="PlotWidget" name="plot_a_time">
+     <widget class="PlotWidget" name="plot_a_time_in">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -43,7 +52,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="PlotWidget" name="plot_a_freq">
+     <widget class="PlotWidget" name="plot_a_freq_in">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -54,23 +63,108 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_4">
+    <widget class="QWidget" name="tab_aaf">
      <attribute name="title">
-      <string>B</string>
+      <string>AAF</string>
      </attribute>
+     <widget class="PlotWidget" name="plot_a_freq_aaf">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>320</y>
+        <width>801</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="PlotWidget" name="plot_a_time_aaf">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>801</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
-    <widget class="QWidget" name="tab_2">
+    <widget class="QWidget" name="tab_sh">
      <attribute name="title">
-      <string>C</string>
+      <string>S/H</string>
      </attribute>
+     <widget class="PlotWidget" name="plot_a_freq_sh">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>320</y>
+        <width>801</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="PlotWidget" name="plot_a_time_sh">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>801</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
-    <widget class="QWidget" name="tab_3">
+    <widget class="QWidget" name="tab_as">
      <attribute name="title">
-      <string>D</string>
+      <string>AS</string>
      </attribute>
+     <widget class="PlotWidget" name="plot_a_freq_as">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>320</y>
+        <width>801</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="PlotWidget" name="plot_a_time_as">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>801</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_rf">
+     <attribute name="title">
+      <string>RF</string>
+     </attribute>
+     <widget class="PlotWidget" name="plot_a_freq_rf">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>320</y>
+        <width>801</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="PlotWidget" name="plot_a_time_rf">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>801</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="box_centralBox">
+   <widget class="QGroupBox" name="box_signalSampling">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -80,7 +174,7 @@
      </rect>
     </property>
     <property name="title">
-     <string>Muestreo de Señales</string>
+     <string>Signal Sampling</string>
     </property>
     <property name="checkable">
      <bool>false</bool>
@@ -95,7 +189,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>Señal de Entrada</string>
+      <string>Input Signal</string>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -110,21 +204,36 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>-1</number>
+       <number>0</number>
       </property>
       <item>
        <property name="text">
-        <string>Senoidal</string>
+        <string>Sinusoidal</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Cuadrada</string>
+        <string>Exponential</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Parabolic</string>
        </property>
       </item>
       <item>
        <property name="text">
         <string>Triangular</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Sawtooth</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Square</string>
        </property>
       </item>
       <item>
@@ -143,7 +252,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Frecuencia [Hz]</string>
+       <string>Frecuency [Hz]</string>
       </property>
      </widget>
      <widget class="QSpinBox" name="spin_frecInputSignal">
@@ -251,7 +360,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Cantidad de muestras: N</string>
+       <string>Number of Samples: N</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_paddingLength">
@@ -287,7 +396,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="box_sampleHold">
+    <widget class="QGroupBox" name="box_samplingType">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -297,19 +406,19 @@
       </rect>
      </property>
      <property name="title">
-      <string>Tipo de Muestreo</string>
+      <string>Sampling Type</string>
      </property>
      <widget class="QCheckBox" name="check_sampleHold">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>40</y>
-        <width>124</width>
+        <width>154</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>Sample and Hold</string>
+       <string>S/H: Sample and Hold</string>
       </property>
      </widget>
      <widget class="QSpinBox" name="spin_dutyControlSignalSH">
@@ -346,12 +455,12 @@
        <rect>
         <x>10</x>
         <y>70</y>
-        <width>108</width>
+        <width>133</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>Analog Switch</string>
+       <string>AS: Analog Switch</string>
       </property>
      </widget>
      <widget class="QSpinBox" name="spin_dutyControlSignalAS">
@@ -381,9 +490,9 @@
       </rect>
      </property>
      <property name="title">
-      <string>Filtros</string>
+      <string>Filters</string>
      </property>
-     <widget class="QCheckBox" name="check_FAA">
+     <widget class="QCheckBox" name="check_AAF">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -393,7 +502,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>FAA: Filtro Anti-Aliasing</string>
+       <string>AAF: Anti-Aliasing Filter</string>
       </property>
       <property name="checkable">
        <bool>true</bool>
@@ -402,17 +511,17 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QCheckBox" name="check_FR">
+     <widget class="QCheckBox" name="check_RF">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>70</y>
-        <width>150</width>
-        <height>21</height>
+        <width>168</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>FR: Filtro Recuperdor</string>
+       <string>RF: Reconstruction Filter</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_2">
@@ -428,7 +537,7 @@
        <string>fp [Hz]</string>
       </property>
      </widget>
-     <widget class="QSpinBox" name="spin_freqFAA">
+     <widget class="QSpinBox" name="spin_freqAAF">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -444,7 +553,7 @@
        <number>40000</number>
       </property>
      </widget>
-     <widget class="QSpinBox" name="spin_freqFR">
+     <widget class="QSpinBox" name="spin_freqRF">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -471,7 +580,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>Señal de Control</string>
+      <string>Control Signal</string>
      </property>
      <widget class="QLabel" name="label_frecControlSignal">
       <property name="geometry">
@@ -483,7 +592,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Frecuencia [Hz]</string>
+       <string>Frecuency [Hz]</string>
       </property>
      </widget>
      <widget class="QSpinBox" name="spin_frecControlSignal">
