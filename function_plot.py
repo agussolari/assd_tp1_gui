@@ -5,8 +5,8 @@ import numpy as np
 from PyQt5.QtWidgets import QFileDialog
 from enum import IntEnum
 
-Node = IntEnum('Nodes', ['IN', 'AAF', 'SH', 'AS', 'RF'], start=0)
-NodePlotTitle = ['Input', 'Anti-Aliasing Filter (AAF)', 'Sample and Hold', 'Analog Switch', 'Reconstruction Filter']
+Node = IntEnum('Nodes', ['IN', 'AAF', 'SH', 'AS', 'RF', 'CUSTOM'], start=0)
+NodePlotTitle = ['Input', 'Anti-Aliasing Filter (AAF)', 'Sample and Hold', 'Analog Switch', 'Reconstruction Filter', 'Custom']
 
 class NodeSignal:
     """Class for plotting signals in each node of the sampling process"""
@@ -41,7 +41,7 @@ def plot_signals(self, tt, st, tf, sf, node):
     NodeTimePlot = [self.plot_a_time_in, self.plot_a_time_aaf, self.plot_a_time_sh, self.plot_a_time_as, self.plot_a_time_rf]
     NodeFreqPlot = [self.plot_a_freq_in, self.plot_a_freq_aaf, self.plot_a_freq_sh, self.plot_a_freq_as, self.plot_a_freq_rf]
 
-    print('Plotting signals')
+    # print('Plotting signals')
     #plot tt and st in "plot_a" QFrame with pyqtgraph
     NodeTimePlot[node].clear()
     NodeTimePlot[node].plot(tt, st, pen='r')
@@ -103,13 +103,14 @@ def generate_node_signal(self):
             self.import_button.setEnabled(True)
             self.import_button.clicked.connect(lambda: import_file(self))
 
-
         elif ( self.box_typeInputSignal.currentIndex() != 7):
             self.import_button.setEnabled(False)
 
 
+
         #Make fft of the input signal
         self.data.input_signal.tf, self.data.input_signal.sf = fft_signal(self, self.data.input_signal.st, self.data.input_signal.tt, padding_length)
+        self.data.input_signal.sf = self.data.input_signal.sf/N
         plot_signals(self, self.data.input_signal.tt, self.data.input_signal.st, self.data.input_signal.tf, self.data.input_signal.sf, Node.IN)
 
 
@@ -122,6 +123,7 @@ def generate_node_signal(self):
         print('Applying AntiAliasFilter')
         self.data.aaf_signal.st = ft.AntiAliasFilter(fp_AAF, self.data.input_signal.st, self.data.input_signal.tt)
     self.data.aaf_signal.tf, self.data.aaf_signal.sf = fft_signal(self, self.data.aaf_signal.st, self.data.input_signal.tt, padding_length)
+    self.data.aaf_signal.sf = self.data.aaf_signal.sf/N
     plot_signals(self, self.data.input_signal.tt, self.data.aaf_signal.st, self.data.aaf_signal.tf, self.data.aaf_signal.sf, Node.AAF)
 
     self.data.sh_signal.st = self.data.aaf_signal.st
@@ -129,6 +131,7 @@ def generate_node_signal(self):
         print('Applying SampleAndHold')
         self.data.sh_signal.st = ft.SampleAndHold(self.data.input_signal.tt , self.data.aaf_signal.st, fs, dsh/100)
     self.data.sh_signal.tf, self.data.sh_signal.sf = fft_signal(self, self.data.sh_signal.st, self.data.input_signal.tt, padding_length)
+    self.data.sh_signal.sf = self.data.sh_signal.sf/N    
     plot_signals(self, self.data.input_signal.tt, self.data.sh_signal.st, self.data.sh_signal.tf, self.data.sh_signal.sf, Node.SH)
 
     self.data.as_signal.st = self.data.sh_signal.st
@@ -136,6 +139,7 @@ def generate_node_signal(self):
         print('Applying AnalogSwitch')
         self.data.as_signal.st = ft.AnalogSwitch(self.data.input_signal.tt , self.data.sh_signal.st, fs, das/100)
     self.data.as_signal.tf, self.data.as_signal.sf = fft_signal(self, self.data.as_signal.st, self.data.input_signal.tt, padding_length)
+    self.data.as_signal.sf = self.data.as_signal.sf/N
     plot_signals(self, self.data.input_signal.tt, self.data.as_signal.st, self.data.as_signal.tf, self.data.as_signal.sf, Node.AS)
 
     self.data.rf_signal.st = self.data.as_signal.st
@@ -143,4 +147,22 @@ def generate_node_signal(self):
         print('Applying RegenerativeFilter')            # Algo esta mal con el filtro recuperador
         self.data.rf_signal.st = ft.RegenerativeFilter(fp_RF, self.data.as_signal.st, self.data.input_signal.tt)
     self.data.rf_signal.tf, self.data.rf_signal.sf = fft_signal(self, self.data.rf_signal.st, self.data.input_signal.tt, padding_length)
+    self.data.rf_signal.sf = self.data.rf_signal.sf/N
     plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.RF)
+
+    if self.tab_plots.currentIndex() == 5: 
+        if self.check_customInput.isChecked():
+            plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.IN)
+        if self.check_customAAF.isChecked():
+            plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.AAF)
+        if self.check_customSH.isChecked():
+            plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.SH)
+        if self.check_customAS.isChecked():
+            plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.AS)
+        if self.check_customRF.isChecked():
+            plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.RF)
+        
+    if self.tab_plots.currentIndex() == 5:
+        self.box_custom.setEnabled(True)
+    else:
+        self.box_custom.setEnabled(False)

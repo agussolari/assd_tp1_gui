@@ -20,7 +20,7 @@
       <x>350</x>
       <y>10</y>
       <width>831</width>
-      <height>661</height>
+      <height>671</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -163,6 +163,31 @@
       </property>
      </widget>
     </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Custom</string>
+     </attribute>
+     <widget class="PlotWidget" name="plot_a_time_custom">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>801</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="PlotWidget" name="plot_a_freq_custom">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>320</y>
+        <width>801</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="box_signalSampling">
     <property name="geometry">
@@ -170,7 +195,7 @@
       <x>10</x>
       <y>10</y>
       <width>331</width>
-      <height>661</height>
+      <height>671</height>
      </rect>
     </property>
     <property name="title">
@@ -204,7 +229,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>-1</number>
       </property>
       <item>
        <property name="text">
@@ -612,6 +637,90 @@
       </property>
      </widget>
     </widget>
+    <widget class="QGroupBox" name="box_custom">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>490</y>
+       <width>311</width>
+       <height>171</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Visible Traces</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <widget class="QCheckBox" name="check_customInput">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>70</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Input</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="check_customAS">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>70</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AS</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="check_customRF">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>70</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>RF</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="check_customSH">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>70</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>S/H</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="check_customAAF">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>70</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>AAF</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -620,7 +729,7 @@
      <x>0</x>
      <y>0</y>
      <width>1190</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

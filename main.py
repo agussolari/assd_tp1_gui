@@ -79,6 +79,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.spin_paddingLength.valueChanged.connect(lambda: fp.generate_node_signal(self))
 
         self.import_button.clicked.connect(lambda: fp.generate_node_signal(self))
+        
+        self.tab_plots.currentChanged.connect(lambda: fp.generate_node_signal(self))
+        
         self.import_button.clicked.connect(lambda: fp.import_file)
 
         
