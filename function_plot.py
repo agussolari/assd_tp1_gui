@@ -4,30 +4,11 @@ import filters as ft
 import numpy as np
 from PyQt5.QtWidgets import QFileDialog
 from enum import IntEnum
+import pyqtgraph as pg
+from pyqtgraph import mkPen
 
 Node = IntEnum('Nodes', ['IN', 'AAF', 'SH', 'AS', 'RF', 'CUSTOM'], start=0)
-NodePlotTitle = ['Input', 'Anti-Aliasing Filter (AAF)', 'Sample and Hold', 'Analog Switch', 'Reconstruction Filter', 'Custom']
-
-class NodeSignal:
-    """Class for plotting signals in each node of the sampling process"""
-    def __init__(self, tt, st, tf, sf):
-        self.tt = tt
-        self.st = st
-        self.tf = tf
-        self.sf = sf
-
-class SampledSignalNodes:
-    """Class for storing signals in each node of the sampling process"""
-    def __init__(self, inSig: NodeSignal, aafSig: NodeSignal, shSig: NodeSignal, asSig: NodeSignal, rfSig: NodeSignal):
-        self.inSig = inSig
-        self.aafSig = aafSig
-        self.shSig = shSig
-        self.asSig = asSig
-        self.sfrfSig = rfSig
-
-# sampledSignal = SampledSignalNodes()
-
-# NodeSignal = 
+NodePlotTitle = ['Input', 'Anti-Aliasing Filter (AAF)', 'Sample and Hold', 'Analog Switch', 'Reconstruction Filter', 'Custom Traces']
 
 def fft_signal(self, signal, time, padding_length):
     if len(time) != 0 and len(signal) != 0 and padding_length != 0:
@@ -37,26 +18,32 @@ def fft_signal(self, signal, time, padding_length):
     
         return tf, sf
 
-def plot_signals(self, tt, st, tf, sf, node, custom=False, color = 'r'):
-    if (custom):
-        NodeTimePlot = self.plot_a_time_custom
-        NodeFreqPlot = self.plot_a_freq_custom
-    else:
-        NodeTimePlot = [self.plot_a_time_in, self.plot_a_time_aaf, self.plot_a_time_sh, self.plot_a_time_as, self.plot_a_time_rf]
-        NodeFreqPlot = [self.plot_a_freq_in, self.plot_a_freq_aaf, self.plot_a_freq_sh, self.plot_a_freq_as, self.plot_a_freq_rf]
+def plot_signals(self, tt, st, tf, sf, node, color = 'r', customNames = []):
+    NodeTimePlot = [self.plot_a_time_in, self.plot_a_time_aaf, self.plot_a_time_sh, self.plot_a_time_as, self.plot_a_time_rf, self.plot_a_time_custom]
+    NodeFreqPlot = [self.plot_a_freq_in, self.plot_a_freq_aaf, self.plot_a_freq_sh, self.plot_a_freq_as, self.plot_a_freq_rf, self.plot_a_freq_custom]
 
     # print('Plotting signals')
     #plot tt and st in "plot_a" QFrame with pyqtgraph
     NodeTimePlot[node].clear()
-    NodeTimePlot[node].plot(tt, st, pen=color)
+    if node == Node.CUSTOM:
+        for i in range(len(st)):
+            NodeTimePlot[node].plot(tt, st[i], pen=color[i], name=customNames[i])
+    else:
+        NodeTimePlot[node].plot(tt, st, pen=mkPen(color, width=3))
     NodeTimePlot[node].setTitle(NodePlotTitle[node])
     NodeTimePlot[node].setLabel('left', 'Amplitude', units='V')
     NodeTimePlot[node].setLabel('bottom', 'Time', units='s')
     NodeTimePlot[node].showGrid(x=True, y=True)
-    
+    # NodeTimePlot[node].setBackground('w')
+
     #plot espectro de la señal en "plot_a_frec" QFrame with pyqtgraph
     NodeFreqPlot[node].clear()
-    NodeFreqPlot[node].plot(tf, sf, pen=color)
+    if node == Node.CUSTOM:
+        NodeFreqPlot[node].addLegend(brush='k', pen='w')
+        for i in range(len(st)):
+            NodeFreqPlot[node].plot(tf[i], sf[i], pen=color[i], name=customNames[i])
+    else:
+        NodeFreqPlot[node].plot(tf, sf, pen=color)
     NodeFreqPlot[node].setTitle(NodePlotTitle[node]+' Spectrum')
     NodeFreqPlot[node].setLabel('left', 'Amplitude', units='V')
     NodeFreqPlot[node].setLabel('bottom', 'Frequency', units='Hz')
@@ -81,6 +68,35 @@ def generate_node_signal(self):
     fp_AAF = self.spin_freqAAF.value()
     fp_RF = self.spin_freqRF.value()
     padding_length = self.spin_paddingLength.value()  # Adjust this value as needed
+
+    # # Plotting options
+
+    # def selectBlackBg(self):
+    #     if(self.menu_bgColorBlack.isChecked()):
+    #         self.menu_bgColorWhite.setChecked(False)
+    #         self.configPlots()
+    #     else:
+    #         self.menu_bgColorWhite.setChecked(True)
+    #         self.selectWhiteBg()
+
+    # def selectWhiteBg(self):
+    #     if(self.menu_bgColorWhite.isChecked()):
+    #         self.menu_bgColorBlack.setChecked(False)
+    #         self.configPlots()
+    #     else:
+    #         self.menu_bgColorBlack.setChecked(True)
+    #         self.selectBlackBg()
+
+    # if self.menu_bgColorBlack.isChecked():
+    #     pg.setConfigOption('background', 'w')
+    #     pg.setConfigOption('foreground', 'k')
+    # else:
+    #     pg.setConfigOption('background', 'k')
+    #     pg.setConfigOption('foreground', 'w')
+    # if self.menu_aa.isChecked():
+    #     pg.setConfigOption('antialias', True)
+    # else:
+    #     pg.setConfigOption('antialias', False)
 
     if f0 != 0 and N != 0:
         if self.box_typeInputSignal.currentIndex() == 0:
@@ -128,7 +144,7 @@ def generate_node_signal(self):
 
     self.data.as_signal.st = self.data.sh_signal.st
     if self.check_analogSwitch.isChecked() and fs != 0 and das != 0:
-        self.data.as_signal.st = 0.5 * ft.AnalogSwitch(self.data.input_signal.tt , self.data.sh_signal.st, fs, das/100)
+        self.data.as_signal.st = ft.AnalogSwitch(self.data.input_signal.tt , self.data.sh_signal.st, fs, das/100)
     self.data.as_signal.tf, self.data.as_signal.sf = fft_signal(self, self.data.as_signal.st, self.data.input_signal.tt, padding_length)
     self.data.as_signal.sf = self.data.as_signal.sf/N
     plot_signals(self, self.data.input_signal.tt, self.data.as_signal.st, self.data.as_signal.tf, self.data.as_signal.sf, Node.AS , color = 'y')
@@ -140,44 +156,27 @@ def generate_node_signal(self):
     self.data.rf_signal.sf = self.data.rf_signal.sf/N
     plot_signals(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, Node.RF, color = 'm')
 
+    NodeCustomTrace = [self.check_customInput, self.check_customAAF, self.check_customSH, self.check_customAS, self.check_customRF]
+    NodeData = [self.data.input_signal, self.data.aaf_signal, self.data.sh_signal, self.data.as_signal, self.data.rf_signal]
+    NodePlotTitle = ['IN', 'AAF', 'S&H', 'AS', 'RF']
+    NodeColor = ['r', 'g', 'b', 'y', 'm']
     if self.tab_plots.currentIndex() == 5:
         self.box_custom.setEnabled(True)
-        
-        self.plot_a_time_custom.clear()
-        self.plot_a_time_custom.setTitle('Input Signal')
-        self.plot_a_time_custom.setLabel('left', 'Amplitude', units='V')
-        self.plot_a_time_custom.setLabel('bottom', 'Time', units='s')
-        self.plot_a_time_custom.showGrid(x=True, y=True)
-        
-        self.plot_a_freq_custom.clear()
-        self.plot_a_freq_custom.setTitle('Input Signal Spectrum')
-        self.plot_a_freq_custom.setLabel('left', 'Amplitude', units='V')
-        self.plot_a_freq_custom.setLabel('bottom', 'Frequency', units='Hz')
-        self.plot_a_freq_custom.showGrid(x=True, y=True)
-        
-        if self.check_customInput.isChecked():
-            plot_custom(self, self.data.input_signal.tt, self.data.input_signal.st, self.data.input_signal.tf, self.data.input_signal.sf, 'r')
-                        
-        if self.check_customAAF.isChecked():
-            plot_custom(self, self.data.input_signal.tt, self.data.aaf_signal.st, self.data.aaf_signal.tf, self.data.aaf_signal.sf, 'g')
-        
-        if self.check_customSH.isChecked():
-            plot_custom(self, self.data.input_signal.tt, self.data.sh_signal.st, self.data.sh_signal.tf, self.data.sh_signal.sf, 'b')
-               
-        if self.check_customAS.isChecked():
-            plot_custom(self, self.data.input_signal.tt, self.data.as_signal.st, self.data.as_signal.tf, self.data.as_signal.sf, 'y')
+        self.data.custom_signal.st.clear()
+        self.data.custom_signal.tf.clear()
+        self.data.custom_signal.sf.clear()
 
-               
-        if self.check_customRF.isChecked():
-            plot_custom(self, self.data.input_signal.tt, self.data.rf_signal.st, self.data.rf_signal.tf, self.data.rf_signal.sf, 'm')
+        colors = []
+        names = []
+        for i in range(len(NodeCustomTrace)):   # Sería más facil cambiar plot_signals para que reciba el objeto (o una lista de objetos)
+            if NodeCustomTrace[i].isChecked():
+                self.data.custom_signal.st.append(NodeData[i].st)
+                self.data.custom_signal.tf.append(NodeData[i].tf)
+                self.data.custom_signal.sf.append(NodeData[i].sf)
+                colors.append(NodeColor[i])
+                names.append(NodePlotTitle[i])
+        
+        plot_signals(self, self.data.input_signal.tt, self.data.custom_signal.st, self.data.custom_signal.tf, self.data.custom_signal.sf, Node.CUSTOM, colors, names)
 
     else:
-        self.box_custom.setEnabled(False)   
-        
-def plot_custom (self, tt ,st, tf, sf, color = 'r'):
-    #plot tt and st in "plot_a" QFrame with pyqtgraph
-    self.plot_a_time_custom.plot(tt, st, pen=color)
-
-    
-    #plot espectro de la señal en "plot_a_frec" QFrame with pyqtgraph
-    self.plot_a_freq_custom.plot(tf, sf, pen=color)
+        self.box_custom.setEnabled(False)

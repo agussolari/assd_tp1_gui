@@ -42,9 +42,9 @@ def AnalogSwitch(t: np.ndarray, sig: np.ndarray, fs: float, ds: float) -> np.nda
     
     Adds a delay of `delay` clk cycles to the output signal.
     """
-    sample_clock = signal.square(2*np.pi*fs*t, duty=ds)+1
+    sample_clock = (signal.square(2*np.pi*fs*t, duty=ds)+1)/2
     if sample_clock[0] == 0:                                            # A veces signal.square no genera un clk que empieza en high
-        sample_clock = -sample_clock
+        sample_clock = 1-sample_clock
 
     return sig*sample_clock
 
