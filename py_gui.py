@@ -128,7 +128,7 @@ class Ui_MainWindow(object):
         self.label_frecModInputSignal.setObjectName("label_frecModInputSignal")
         self.gridLayout_2.addWidget(self.label_frecModInputSignal, 3, 0, 1, 1)
         self.spin_frecModInputSignal = QtWidgets.QSpinBox(self.box_inputSignals)
-        self.spin_frecModInputSignal.setEnabled(True)
+        self.spin_frecModInputSignal.setEnabled(False)
         self.spin_frecModInputSignal.setMinimumSize(QtCore.QSize(100, 0))
         self.spin_frecModInputSignal.setMaximumSize(QtCore.QSize(100, 16777215))
         self.spin_frecModInputSignal.setMaximum(100000)

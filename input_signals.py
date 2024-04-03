@@ -81,7 +81,7 @@ def generate_exponential_signal( f0, N, a0=1, p0=0, tau=1):
 
     # calculo el periodo de la señal
     T0 = 1/f0
-    tau = T0/2
+    tau = T0
     # calculo el periodo de muestreo
     # genero el vector de tiempos
     tt = np.linspace(0, 10*T0, N)
