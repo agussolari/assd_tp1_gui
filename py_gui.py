@@ -194,14 +194,14 @@ class Ui_MainWindow(object):
         self.spin_freqRF.setMinimumSize(QtCore.QSize(100, 0))
         self.spin_freqRF.setMaximumSize(QtCore.QSize(100, 16777215))
         self.spin_freqRF.setMaximum(1000000)
-        self.spin_freqRF.setProperty("value", 40000)
+        self.spin_freqRF.setProperty("value", 37500)
         self.spin_freqRF.setObjectName("spin_freqRF")
         self.gridLayout_4.addWidget(self.spin_freqRF, 2, 1, 1, 1, QtCore.Qt.AlignRight)
         self.spin_freqAAF = QtWidgets.QSpinBox(self.box_filters)
         self.spin_freqAAF.setMinimumSize(QtCore.QSize(100, 0))
         self.spin_freqAAF.setMaximumSize(QtCore.QSize(100, 16777215))
         self.spin_freqAAF.setMaximum(1000000)
-        self.spin_freqAAF.setProperty("value", 40000)
+        self.spin_freqAAF.setProperty("value", 37500)
         self.spin_freqAAF.setObjectName("spin_freqAAF")
         self.gridLayout_4.addWidget(self.spin_freqAAF, 1, 1, 1, 1, QtCore.Qt.AlignRight)
         self.check_RF = QtWidgets.QCheckBox(self.box_filters)
@@ -341,7 +341,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.box_typeInputSignal.setCurrentIndex(-1)
-        self.tab_plots.setCurrentIndex(4)
+        self.tab_plots.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

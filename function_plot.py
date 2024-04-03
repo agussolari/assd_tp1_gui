@@ -50,8 +50,10 @@ def plot_signals(self, tt, st, tf, sf, node, color = 'r', customNames = []):
     NodeFreqPlot[node].showGrid(x=True, y=True)
         
 def import_file(self):
+    N = self.spin_samplesInputSignal.value()
     filename = QFileDialog.getOpenFileName(self, 'Open file', 'c:\\', "WAV files (*.wav)")
     self.data.input_signal.tt, self.data.input_signal.st = isig.generate_audio_signal(filename)
+    self.data.input_signal.st = self.data.input_signal.st/N
     
     generate_node_signal(self)
 

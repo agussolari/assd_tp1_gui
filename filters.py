@@ -1,14 +1,13 @@
 import numpy as np
-from scipy.signal import ellip, lsim, cheby1, cheb1ord
+from scipy.signal import butter, ellip, lsim, cheby1, cheb1ord
 import scipy.signal as signal
 
 def AntiAliasFilter(fp, signal, t): 
-    N, wn = cheb1ord(2*np.pi*fp, 2*np.pi*fp*1.1, 1, 40, analog=True) #Calculate the order and wn of the filter
+    N = 6  # Order of the filter
+    wn = 2*np.pi*fp  # Natural frequency
 
-    
-
-    a,b = cheby1(N, 1 , wn, btype='low', analog=True, output='ba')
-    tout, yout, xout = lsim((a,b), signal, t) #Apply the filter to the signal
+    b, a = butter(N, wn, btype='low', analog=True)
+    tout, yout, xout = lsim((b, a), signal, t)  # Apply the filter to the signal
     return yout
 
 def RegenerativeFilter(fp, signal, t):

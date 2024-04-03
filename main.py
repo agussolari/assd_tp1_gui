@@ -2,7 +2,7 @@ import subprocess
 import function_plot as fp
 import input_signals as isig
 
-# subprocess.run(["pyuic5", "-x", "qt_gui.ui", "-o", "py_gui.py"])
+subprocess.run(["pyuic5", "-x", "qt_gui.ui", "-o", "py_gui.py"])
 
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import *
@@ -40,6 +40,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         
         self.setWindowTitle('ASSD - GUI - Muestreo de señales')
+        self.setWindowIcon(QIcon('logo.jpg'))
         
         self.data = SignalsData()
         
