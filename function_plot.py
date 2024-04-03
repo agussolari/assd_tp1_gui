@@ -62,6 +62,9 @@ def import_file(self):
 def generate_node_signal(self):
 
     f0 = self.spin_frecInputSignal.value()
+    per_ext = self.spin_perExtInputSignal.value()
+    fc = self.spin_frecPortInputSignal.value()
+    fm = self.spin_frecModInputSignal.value()
     dc = self.spin_dutyInputSignal.value()
     N = self.spin_samplesInputSignal.value()
     fs = self.spin_frecControlSignal.value()
@@ -102,7 +105,8 @@ def generate_node_signal(self):
 
     if f0 != 0 and N != 0:
         if self.box_typeInputSignal.currentIndex() == 0:
-            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_sinusoidal_signal(f0, N)
+            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_sinusoidal_signal(f0, per_ext, N)
+            self.spin_perExtInputSignal.setEnabled(True)
 
         elif self.box_typeInputSignal.currentIndex() == 1:
             self.data.input_signal.tt, self.data.input_signal.st = isig.generate_exponential_signal(f0,N)
@@ -113,12 +117,21 @@ def generate_node_signal(self):
         elif self.box_typeInputSignal.currentIndex() == 3 and dc != 0:
             self.data.input_signal.tt, self.data.input_signal.st = isig.generate_square_signal(f0, N, dc/100)
 
-        elif self.box_typeInputSignal.currentIndex() == 4:
+        elif self.box_typeInputSignal.currentIndex() == 4 and dc != 0:
+            self.data.input_signal.tt, self.data.input_signal.st = isig.generate_am_signal(fc, fm, N)
+            self.spin_frecModInputSignal.setEnabled(True)
+            self.spin_frecPortInputSignal.setEnabled(True)
+
+        elif self.box_typeInputSignal.currentIndex() == 5:
             self.import_button.setEnabled(True)
 
-        elif ( self.box_typeInputSignal.currentIndex() != 4):
+        if (self.box_typeInputSignal.currentIndex() != 0):
+            self.spin_perExtInputSignal.setEnabled(False)
+        if (self.box_typeInputSignal.currentIndex() != 4):
+            self.spin_frecModInputSignal.setEnabled(False)
+            self.spin_frecPortInputSignal.setEnabled(False)
+        if (self.box_typeInputSignal.currentIndex() != 5):
             self.import_button.setEnabled(False)
-
 
 
         #Make fft of the input signal
@@ -131,7 +144,7 @@ def generate_node_signal(self):
         return None
 
     self.data.aaf_signal.st = self.data.input_signal.st
-    if self.check_AAF.isChecked() and fp_AAF != 0:              # Hace falta chequear f=0 o ploteamos igual
+    if self.check_AAF.isChecked() and fp_AAF != 0:
         self.data.aaf_signal.st = ft.AntiAliasFilter(fp_AAF, self.data.input_signal.st, self.data.input_signal.tt)
     self.data.aaf_signal.tf, self.data.aaf_signal.sf = fft_signal(self, self.data.aaf_signal.st, self.data.input_signal.tt, padding_length)
     self.data.aaf_signal.sf = self.data.aaf_signal.sf/N

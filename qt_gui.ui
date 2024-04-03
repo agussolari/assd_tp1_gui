@@ -13,7 +13,7 @@
   <property name="minimumSize">
    <size>
     <width>200</width>
-    <height>600</height>
+    <height>400</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
       <property name="minimumSize">
        <size>
         <width>200</width>
-        <height>500</height>
+        <height>300</height>
        </size>
       </property>
       <property name="maximumSize">
@@ -91,8 +91,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>306</width>
-            <height>623</height>
+            <width>310</width>
+            <height>644</height>
            </rect>
           </property>
           <property name="minimumSize">
@@ -137,65 +137,63 @@
              <property name="flat">
               <bool>false</bool>
              </property>
-             <layout class="QGridLayout" name="gridLayout_6" columnminimumwidth="0,0">
-              <item row="4" column="1" alignment="Qt::AlignRight">
-               <widget class="QSpinBox" name="spin_paddingLength">
-                <property name="minimumSize">
-                 <size>
-                  <width>100</width>
-                  <height>0</height>
-                 </size>
+             <layout class="QGridLayout" name="gridLayout_2">
+              <item row="0" column="0">
+               <widget class="QComboBox" name="box_typeInputSignal">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
                 </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>100</width>
-                  <height>16777215</height>
-                 </size>
+                <property name="currentIndex">
+                 <number>-1</number>
                 </property>
-                <property name="minimum">
-                 <number>1</number>
+                <property name="frame">
+                 <bool>true</bool>
                 </property>
-                <property name="maximum">
-                 <number>100000</number>
-                </property>
-                <property name="value">
-                 <number>1000</number>
-                </property>
+                <item>
+                 <property name="text">
+                  <string>Sinusoidal</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Exponential</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Triangular</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Square</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>AM</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Audio</string>
+                 </property>
+                </item>
                </widget>
               </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="label_frecInputDuty">
-                <property name="text">
-                 <string>Duty Cycle [%]</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1" alignment="Qt::AlignRight">
-               <widget class="QSpinBox" name="spin_dutyInputSignal">
-                <property name="minimumSize">
-                 <size>
-                  <width>100</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>100</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="maximum">
-                 <number>100</number>
-                </property>
-                <property name="value">
-                 <number>50</number>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1" alignment="Qt::AlignRight">
+              <item row="0" column="1">
                <widget class="QPushButton" name="import_button">
                 <property name="enabled">
                  <bool>false</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
                 </property>
                 <property name="mouseTracking">
                  <bool>false</bool>
@@ -246,14 +244,157 @@
                 </property>
                </widget>
               </item>
-              <item row="4" column="0">
-               <widget class="QLabel" name="label_paddingLength">
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_perExtInputSignal">
                 <property name="text">
-                 <string>Padding Length</string>
+                 <string>Periodic Extension Ratio</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1" alignment="Qt::AlignRight">
+               <widget class="QDoubleSpinBox" name="spin_perExtInputSignal">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="decimals">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <double>10.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+                <property name="value">
+                 <double>1.500000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_frecModInputSignal">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Modulation Frecuency [Hz]</string>
                 </property>
                </widget>
               </item>
               <item row="3" column="1" alignment="Qt::AlignRight">
+               <widget class="QSpinBox" name="spin_frecModInputSignal">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="maximum">
+                 <number>100000</number>
+                </property>
+                <property name="value">
+                 <number>3000</number>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_frecPortInputSignal">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Carrier Frecuency [Hz]</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1" alignment="Qt::AlignRight">
+               <widget class="QSpinBox" name="spin_frecPortInputSignal">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="maximum">
+                 <number>100000</number>
+                </property>
+                <property name="value">
+                 <number>30000</number>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="label_frecInputDuty">
+                <property name="text">
+                 <string>Duty Cycle [%]</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1" alignment="Qt::AlignRight">
+               <widget class="QSpinBox" name="spin_dutyInputSignal">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="maximum">
+                 <number>100</number>
+                </property>
+                <property name="value">
+                 <number>50</number>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="label_samplesInputSignal">
+                <property name="text">
+                 <string>Number of Samples: N</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1" alignment="Qt::AlignRight">
                <widget class="QSpinBox" name="spin_samplesInputSignal">
                 <property name="minimumSize">
                  <size>
@@ -278,49 +419,36 @@
                 </property>
                </widget>
               </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="label_samplesInputSignal">
+              <item row="7" column="0">
+               <widget class="QLabel" name="label_paddingLength">
                 <property name="text">
-                 <string>Number of Samples: N</string>
+                 <string>Padding Length</string>
                 </property>
                </widget>
               </item>
-              <item row="0" column="0">
-               <widget class="QComboBox" name="box_typeInputSignal">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
+              <item row="7" column="1" alignment="Qt::AlignRight">
+               <widget class="QSpinBox" name="spin_paddingLength">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
                 </property>
-                <property name="currentIndex">
-                 <number>-1</number>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
                 </property>
-                <item>
-                 <property name="text">
-                  <string>Sinusoidal</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Exponential</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Triangular</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Square</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Audio</string>
-                 </property>
-                </item>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>100000</number>
+                </property>
+                <property name="value">
+                 <number>1000</number>
+                </property>
                </widget>
               </item>
              </layout>
@@ -740,7 +868,7 @@
      <x>0</x>
      <y>0</y>
      <width>1227</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_options">

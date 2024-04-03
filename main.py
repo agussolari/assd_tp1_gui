@@ -2,7 +2,7 @@ import subprocess
 import function_plot as fp
 import input_signals as isig
 
-# subprocess.run(["pyuic5", "-x", "qt_gui.ui", "-o", "py_gui.py"])
+subprocess.run(["pyuic5", "-x", "qt_gui.ui", "-o", "py_gui.py"])
 
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import *
@@ -51,6 +51,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def connect_signals(self):
         self.spin_frecInputSignal.valueChanged.connect(lambda: fp.generate_node_signal(self))
+        self.spin_perExtInputSignal.valueChanged.connect(lambda: fp.generate_node_signal(self))
+        self.spin_frecPortInputSignal.valueChanged.connect(lambda: fp.generate_node_signal(self))
+        self.spin_frecModInputSignal.valueChanged.connect(lambda: fp.generate_node_signal(self))
         self.spin_dutyInputSignal.valueChanged.connect(lambda: fp.generate_node_signal(self))
         self.box_typeInputSignal.currentIndexChanged.connect(lambda: fp.generate_node_signal(self))
 

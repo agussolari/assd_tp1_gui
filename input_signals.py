@@ -10,7 +10,7 @@ from scipy.io import wavfile
 
 
 # generear una señal senoidal de frecuencia, amplitud y fase configurables
-def generate_sinusoidal_signal(f0, N, a0=1, p0=0):
+def generate_sinusoidal_signal(f0, per_ext, N, a0=1, p0=0):
     # fs: frecuencia de muestreo
     # f0: frecuencia de la señal
     # N: cantidad de muestras
@@ -21,11 +21,16 @@ def generate_sinusoidal_signal(f0, N, a0=1, p0=0):
     T0 = 1/f0
 
     #quiero que el vector de tiempos se ajuste a la frecuencia de la señal y tenga N muestras
-    tt = np.linspace(0, 10*T0, N)    
+    tt = np.linspace(0, per_ext*T0, int(N/10))
+    # tt = np.linspace(0, 10*T0, N)
     
     # genero la señal
     st = a0 * np.sin(2*np.pi*f0*tt + p0)
-
+    
+    # Repeat the sine wave to make it periodic
+    tt = np.linspace(0, 10*per_ext*T0, 10*int(N/10))
+    st = np.tile(st, 10)
+    
     return tt, st
 
 # generear una señal cuadrada de frecuencia, amplitud, fase y duty cycle configurables
@@ -76,6 +81,7 @@ def generate_exponential_signal( f0, N, a0=1, p0=0, tau=1):
 
     # calculo el periodo de la señal
     T0 = 1/f0
+    tau = T0/2
     # calculo el periodo de muestreo
     # genero el vector de tiempos
     tt = np.linspace(0, 10*T0, N)
@@ -112,6 +118,34 @@ def generate_impulse_signal(fs, N, a0=1):
     # genero la señal
     st = a0 * np.zeros(N)
     st[0] = 1
+
+    return tt, st
+
+# generear una señal AM de frecuencia, amplitud y fase configurables
+def generate_am_signal(fc, fm, N, Ac=1, Am=1, phi_c=0, phi_m=0):
+    # fc: frecuencia de la portadora
+    # fm: frecuencia de la moduladora
+    # N: cantidad de muestras
+    # Ac: amplitud de la portadora
+    # Am: amplitud de la moduladora
+    # phi_c: fase de la portadora
+    # phi_m: fase de la moduladora
+
+    # calculo el periodo de la portadora y la moduladora
+    Tc = 1/fc
+    Tm = 1/fm
+
+    # genero el vector de tiempos
+    tt = np.linspace(0, 10*Tm, N)
+
+    # genero la señal moduladora
+    sm = Am * np.sin(2*np.pi*fm*tt + phi_m)
+
+    # genero la señal portadora
+    sc = Ac * np.sin(2*np.pi*fc*tt + phi_c)
+
+    # genero la señal AM
+    st = (1 + sm) * sc
 
     return tt, st
 
