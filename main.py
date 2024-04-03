@@ -2,7 +2,7 @@ import subprocess
 import function_plot as fp
 import input_signals as isig
 
-subprocess.run(["pyuic5", "-x", "qt_gui.ui", "-o", "py_gui.py"])
+# subprocess.run(["pyuic5", "-x", "qt_gui.ui", "-o", "py_gui.py"])
 
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import *

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1196</width>
-    <height>753</height>
+    <width>1227</width>
+    <height>736</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -37,7 +37,7 @@
       </property>
       <property name="maximumSize">
        <size>
-        <width>350</width>
+        <width>330</width>
         <height>1000000</height>
        </size>
       </property>
@@ -53,17 +53,32 @@
       <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
        <item>
         <widget class="QScrollArea" name="scrollArea">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="frameShape">
-          <enum>QFrame::Box</enum>
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
          </property>
          <property name="lineWidth">
-          <number>1</number>
+          <number>0</number>
          </property>
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
          <property name="sizeAdjustPolicy">
-          <enum>QAbstractScrollArea::AdjustIgnored</enum>
+          <enum>QAbstractScrollArea::AdjustToContents</enum>
          </property>
          <property name="widgetResizable">
           <bool>true</bool>
@@ -76,15 +91,39 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>321</width>
-            <height>649</height>
+            <width>306</width>
+            <height>623</height>
            </rect>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_8">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_8" stretch="1,1,1,1,0">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QGroupBox" name="box_inputSignals">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -92,10 +131,13 @@
              <property name="title">
               <string>Input Signal</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             </property>
              <property name="flat">
               <bool>false</bool>
              </property>
-             <layout class="QGridLayout" name="gridLayout_6">
+             <layout class="QGridLayout" name="gridLayout_6" columnminimumwidth="0,0">
               <item row="4" column="1" alignment="Qt::AlignRight">
                <widget class="QSpinBox" name="spin_paddingLength">
                 <property name="minimumSize">
@@ -287,7 +329,7 @@
            <item>
             <widget class="QGroupBox" name="box_controlSignal">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -295,13 +337,13 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>100</height>
+               <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>150</height>
+               <height>16777215</height>
               </size>
              </property>
              <property name="title">
@@ -348,6 +390,12 @@
            </item>
            <item>
             <widget class="QGroupBox" name="box_samplingType">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="autoFillBackground">
               <bool>false</bool>
              </property>
@@ -357,7 +405,10 @@
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
-             <layout class="QGridLayout" name="gridLayout_5">
+             <layout class="QGridLayout" name="gridLayout_5" columnminimumwidth="170,0">
+              <property name="topMargin">
+               <number>0</number>
+              </property>
               <item row="2" column="0">
                <widget class="QCheckBox" name="check_analogSwitch">
                 <property name="text">
@@ -425,10 +476,19 @@
            </item>
            <item>
             <widget class="QGroupBox" name="box_filters">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="title">
               <string>Filters</string>
              </property>
-             <layout class="QGridLayout" name="gridLayout_4">
+             <layout class="QGridLayout" name="gridLayout_4" columnminimumwidth="170,0">
+              <property name="topMargin">
+               <number>0</number>
+              </property>
               <item row="0" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                <widget class="QLabel" name="label_2">
                 <property name="layoutDirection">
@@ -512,10 +572,16 @@
              </layout>
             </widget>
            </item>
-           <item>
+           <item alignment="Qt::AlignTop">
             <widget class="QGroupBox" name="box_custom">
              <property name="enabled">
               <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
              <property name="title">
               <string>Visible Traces</string>
@@ -524,17 +590,10 @@
               <bool>false</bool>
              </property>
              <layout class="QGridLayout" name="gridLayout_3">
-              <item row="0" column="0">
-               <widget class="QCheckBox" name="check_customInput">
+              <item row="1" column="1">
+               <widget class="QCheckBox" name="check_customAS">
                 <property name="text">
-                 <string>Input</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QCheckBox" name="check_customSH">
-                <property name="text">
-                 <string>S/H</string>
+                 <string>AS</string>
                 </property>
                </widget>
               </item>
@@ -545,6 +604,13 @@
                 </property>
                </widget>
               </item>
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="check_customInput">
+                <property name="text">
+                 <string>Input</string>
+                </property>
+               </widget>
+              </item>
               <item row="1" column="0">
                <widget class="QCheckBox" name="check_customAAF">
                 <property name="text">
@@ -552,10 +618,10 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
-               <widget class="QCheckBox" name="check_customAS">
+              <item row="0" column="1">
+               <widget class="QCheckBox" name="check_customSH">
                 <property name="text">
-                 <string>AS</string>
+                 <string>S/H</string>
                 </property>
                </widget>
               </item>
@@ -673,7 +739,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1196</width>
+     <width>1227</width>
      <height>26</height>
     </rect>
    </property>
